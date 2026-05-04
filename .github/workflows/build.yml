@@ -26,14 +26,6 @@ jobs:
         with:
           gradle-version: "8.7"
 
-      - name: Generate Gradle Wrapper (if missing)
-        run: |
-          if [ ! -f gradlew ]; then
-            echo "gradlew not found â€” generating..."
-            gradle wrapper --gradle-version 8.7 --distribution-type bin
-          fi
-          chmod +x gradlew
-
       - name: Create libs.versions.toml (if missing)
         run: |
           if [ ! -f gradle/libs.versions.toml ]; then
@@ -103,7 +95,13 @@ jobs:
           else
             echo "libs.versions.toml already exists"
           fi
-
+      - name: Generate Gradle Wrapper (if missing)
+        run: |
+          if [ ! -f gradlew ]; then
+            echo "gradlew not found â€” generating..."
+            gradle wrapper --gradle-version 8.7 --distribution-type bin
+          fi
+          chmod +x gradlew
       - name: Build Debug APK
         run: ./gradlew assembleDebug --stacktrace --no-daemon
 
